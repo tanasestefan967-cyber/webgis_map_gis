@@ -22,8 +22,8 @@ export default function GeoJsonSearch() {
       searchProperty: "name",
     },
     biserici: {
-      label: "Biserici",
-      url: "/data/biserici_RO.geojson",
+      label: "Ape",
+      url: "/data/ape_bistrita.geojson",
       searchProperty: "name",
     }
   };

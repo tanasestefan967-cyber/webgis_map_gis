@@ -1,29 +1,24 @@
 import { LayersControl, TileLayer } from "react-leaflet";
 import { useState } from "react";
 
-import BisericiLayer from "./BisericiLayer";
-import RoJudeteLayer from "./RoJudeteLayer";
-import RauriLayer from "./RauriLayer";
 import DownloadLayers from "./DownloadLayers";
-import ApeBistritaLayer from "./ApeBistritaLayer";
-import DrumuriBistritaLayer from "./DrumuriBistritaLayer";
-import CladiriBistritaLayer from "./CladiriBistritaLayer";
-
+import RauriValeaDoftaneiLayer from "./RauriValeaDoftaneiLayer";
+import DrumuriValeaDoftaneiLayer from "./DrumuriValeaDoftaneiLayer";
+import CladiriValeaDoftaneiLayer from "./CladiriValeaDoftaneiLayer";
+import LimitaValeaDoftaneiLayer from "./LimitaValeaDoftaneiLayer";
 
 const { BaseLayer } = LayersControl;
 
 export default function LayerToggle() {
-  const [showBiserici, setShowBiserici] = useState(false);
-  const [showJudete, setShowJudete] = useState(false);
-  const [showRauri, setShowRauri] = useState(false);
-  const [showApeBistrita, setShowApeBistrita] = useState(false)
-  const [showDrumuriBistrita, setShowDrumuriBistrita] = useState(false)
-  const [showCladiriBistrita, setShowCladiriBistrita] = useState(false)
-
+  const [showRauriValeaDoftanei, setShowRauriValeaDoftanei] = useState(false)
+  const [showDrumuriValeaDoftanei, setShowDrumuriValeaDoftanei] = useState(false)
+  const [showCladiriValeaDoftanei, setShowCladiriValeaDoftanei] = useState(false)
+  const [showLimitaValeaDoftanei, setShowLimitaValeaDoftanei] = useState(false)
+  
 
   // Helper to toggle a layer with loading overlay
   const handleLayerToggle = async (setter, value, fetchPromise) => {
-    setter(value);             // toggle the checkbox state
+    setter(value);             // toggle the checkbox state   
     if (value && fetchPromise) {
       try {
         await fetchPromise();  // wait for layer data to "load"
@@ -51,93 +46,57 @@ export default function LayerToggle() {
         <label>
           <input
             type="checkbox"
-            checked={showBiserici}
+            checked={showRauriValeaDoftanei}
             onChange={(e) =>
-              handleLayerToggle(setShowBiserici, e.target.checked, async () => {
-                await fetch("/data/biserici_RO.geojson"); // simulate load
+              handleLayerToggle(setShowRauriValeaDoftanei, e.target.checked, async () => {
+                await fetch("/data/rauri_Valea_Doftanei.geojson");
               })
             }
           />
-          Biserici
-        </label>
-        <br />
-
-        <label>
-          <input
-            type="checkbox"
-            checked={showJudete}
-            onChange={(e) =>
-              handleLayerToggle(setShowJudete, e.target.checked, async () => {
-                await fetch("/data/ro_judete_poligon.geojson");
-              })
-            }
-          />
-          Judete
-        </label>
-        <br />
-
-        <label>
-          <input
-            type="checkbox"
-            checked={showRauri}
-            onChange={(e) =>
-              handleLayerToggle(setShowRauri, e.target.checked, async () => {
-                await fetch("/data/rauri.geojson");
-              })
-            }
-          />
-          Rauri
+          Rauri Valea Doftanei
         </label>
         <br />
         <label>
           <input
             type="checkbox"
-            checked={showApeBistrita}
+            checked={showDrumuriValeaDoftanei}
             onChange={(e) =>
-              handleLayerToggle(setShowApeBistrita, e.target.checked, async () => {
-                await fetch("/data/ape_bistrita.geojson");
+              handleLayerToggle(setShowDrumuriValeaDoftanei, e.target.checked, async () => {
+                await fetch("/data/drumuri_Valea_Doftanei.geojson");
               })
             }
           />
-          Rauri Bistrita
+          Drumuri Valea Doftanei
         </label>
         <br />
         <label>
           <input
             type="checkbox"
-            checked={showDrumuriBistrita}
+            checked={showCladiriValeaDoftanei}
             onChange={(e) =>
-              handleLayerToggle(setShowDrumuriBistrita, e.target.checked, async () => {
-                await fetch("/data/drumuri_bistrita.geojson");
+              handleLayerToggle(setShowCladiriValeaDoftanei, e.target.checked, async () => {
+                await fetch("/data/cladiri_Valea_Doftanei.geojson");
               })
             }
           />
-          Drumuri Bistrita
+          Cladiri Valea Doftanei
         </label>
         <br />
         <label>
           <input
             type="checkbox"
-            checked={showCladiriBistrita}
+            checked={showLimitaValeaDoftanei}
             onChange={(e) =>
-              handleLayerToggle(setShowCladiriBistrita, e.target.checked, async () => {
-                await fetch("/data/cladiri_bistrita.geojson");
+              handleLayerToggle(setShowLimitaValeaDoftanei, e.target.checked, async () => {
+                await fetch("/data/limita_administrativa_Valea_doftanei.geojson");
               })
             }
           />
-          Cladiri Bistrita
+          Limita Valea Doftanei
+              
         </label>
 
-      </div>
-
-      {/* DOWNLOAD LAYERS */}
-      <DownloadLayers
-        layers={[
-          showBiserici && { url: "/data/biserici_RO.geojson", filename: "biserici_RO.geojson" },
-          showJudete && { url: "/data/ro_judete_poligon.geojson", filename: "judete.geojson" },
-          showRauri && { url: "/data/rauri.geojson", filename: "rauri.geojson" },
-        ].filter(Boolean)}
-      />
+      </div>    
 
       {/* BASEMAP CONTROL */}
       <LayersControl position="topright">
@@ -184,14 +143,22 @@ export default function LayerToggle() {
         </BaseLayer>
       </LayersControl>
 
-      {/* LAZY LOADED DATA LAYERS */}
-      {showBiserici && <BisericiLayer />}
-      {showJudete && <RoJudeteLayer />}
-      {showRauri && <RauriLayer />}
-      {showApeBistrita && <ApeBistritaLayer/>}
-      {showDrumuriBistrita && <DrumuriBistritaLayer/>}
-      {showCladiriBistrita && <CladiriBistritaLayer/>}
+       {/* DOWNLOAD LAYERS */}
+      <DownloadLayers
+        layers={[
+          showRauriValeaDoftanei && { url: "/data/rauri_Valea_Doftanei.geojson", filename: "rauri_Valea_Doftanei.geojson" },
+          showCladiriValeaDoftanei && { url: "/data/cladiri_Valea_Doftanei.geojson", filename: "cladiri_Valea_Doftanei.geojson" },
+          showDrumuriValeaDoftanei && { url: "/data/drumuri_Valea_Doftanei.geojson", filename: "drumuri_Valea_Doftanei.geojson" },
+          showLimitaValeaDoftanei && { url: "/data/limita_administrativa_Valea_doftanei.geojson", filename: "limita_administrativa_Valea_doftanei.geojson" },
+          
+        ].filter(Boolean)}
+      />
 
+      {/* LAZY LOADED DATA LAYERS */}
+      {showRauriValeaDoftanei && <RauriValeaDoftaneiLayer/>}
+      {showDrumuriValeaDoftanei && <DrumuriValeaDoftaneiLayer/>}
+      {showCladiriValeaDoftanei && <CladiriValeaDoftaneiLayer/>}
+      {showLimitaValeaDoftanei && <LimitaValeaDoftaneiLayer/>}
     </>
   );
 }
